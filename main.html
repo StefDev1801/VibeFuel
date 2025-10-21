@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VibeFuel - Energia che dura, vibe che resta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #2d3748;
+            overflow-x: hidden;
+        }
+
+        /* COUNTDOWN SECTION */
+        .countdown-section {
+            background-color: #7353AD;
+            padding: 1.5rem 2rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .countdown-text {
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .countdown-value {
+            color: white;
+            font-weight: bold;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        .countdown-label {
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .countdown-text {
+                font-size: 1.2rem;
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+
+            .countdown-timer {
+                gap: 1rem;
+            }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            bottom: -150px;
+            left: -150px;
+            animation: float 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .usp {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 1rem;
+            font-weight: 300;
+            line-height: 1.8;
+        }
+
+        .payoff {
+            font-size: 1.6rem;
+            color: #ffd700;
+            margin-top: 2rem;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        .products-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(180deg, #f7fafc 0%, #edf2f7 100%);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: #2d3748;
+            font-weight: 700;
+        }
+
+        .products-grid {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 4rem;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            flex: 0 0 calc(25% - 1.5rem);
+            min-width: 280px;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .product-content {
+            padding: 2rem;
+        }
+
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #667eea;
+        }
+
+        .product-description {
+            font-size: 1rem;
+            color: #4a5568;
+            margin-bottom: 1rem;
+        }
+
+        .product-highlight {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        .lifestyle-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            text-align: center;
+        }
+
+        .lifestyle-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .lifestyle-text {
+            font-size: 1.5rem;
+            line-height: 2;
+            font-weight: 300;
+            margin-bottom: 2rem;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .benefit-item {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 1.5rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .benefit-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .benefit-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .cta-section {
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .cta-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1.5rem 3rem;
+            background: white;
+            color: #f5576c;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .promo-badge {
+            display: inline-block;
+            background: #ffd700;
+            color: #2d3748;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .features-list li {
+            margin: 0.5rem 0;
+        }
+
+        .features-list li::before {
+            content: "✓ ";
+            color: #ffd700;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .products-grid {
+                flex-wrap: wrap;
+            }
+
+            .product-card {
+                flex: 0 0 calc(50% - 1rem);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                flex-direction: column;
+            }
+
+            .product-card {
+                flex: 1 1 auto;
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- COUNTDOWN SECTION -->
+    <section class="countdown-section">
+        <div class="countdown-text">Offerta Speciale Termina Tra:</div>
+        <div class="countdown-timer">
+            <div class="countdown-item">
+                <div class="countdown-value" id="days">00</div>
+                <div class="countdown-label">Giorni</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="hours">00</div>
+                <div class="countdown-label">Ore</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="minutes">00</div>
+                <div class="countdown-label">Minuti</div>
+            </div>
+            <div class="countdown-item">
+                <div class="countdown-value" id="seconds">00</div>
+                <div class="countdown-label">Secondi</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero">
+        <div class="hero-content">
+            <div class="logo">VibeFuel</div>
+            <h1>Energia che dura,<br>vibe che resta</h1>
+            <p class="usp">
+                Prodotti naturali, ricchi di nutrienti, senza zuccheri aggiunti.<br>
+                Facili da integrare nella tua routine quotidiana.<br>
+                Ideali per sostenere uno stile di vita sano e attivo.
+            </p>
+            <p class="payoff">Il tuo alleato per vitalità e benessere, dalla mattina alla sera.</p>
+        </div>
+        <div class="scroll-indicator">↓</div>
+    </section>
+
+    <section class="products-section">
+        <div class="container">
+            <h2 class="section-title">Scopri la linea VibeFuel</h2>
+
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/boostbar.jpg" alt="VibeFuel BoostBar"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">BoostBar</h3>
+                        <p class="product-description">
+                            Barretta proteica naturale con avena integrale, burro di mandorle e cacao amaro.
+                            Perfetta come snack pre-allenamento o spezza-fame salutare.
+                        </p>
+                        <span class="product-highlight">15g proteine vegetali</span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/greencharge.jpg" alt="VibeFuel GreenCharge"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">GreenCharge</h3>
+                        <p class="product-description">
+                            Mix in polvere alla spirulina, moringa, maca, menta e limone.
+                            Ricco di antiossidanti e vitamine per la tua ricarica quotidiana.
+                        </p>
+                        <span class="product-highlight">Superfood naturale</span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/crunchpea.jpg" alt="VibeFuel CrunchPea"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">CrunchPea</h3>
+                        <p class="product-description">
+                            Snack croccante a base di ceci e piselli tostati con spezie mediterranee.
+                            Ideale come spuntino saziante e gustoso.
+                        </p>
+                        <span class="product-highlight">10g proteine per porzione</span>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="img/nightfix.jpg" alt="VibeFuel NightFix"
+                            style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="product-content">
+                        <h3 class="product-name">NightFix</h3>
+                        <p class="product-description">
+                            Smoothie proteico rilassante con banana, camomilla, vaniglia e proteine di riso.
+                            Favorisce il recupero muscolare notturno.
+                        </p>
+                        <span class="product-highlight">Recupero notturno</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="lifestyle-section">
+        <div class="container">
+            <div class="lifestyle-content">
+                <h2 class="section-title" style="color: white;">Il tuo stile, la tua energia</h2>
+                <p class="lifestyle-text">
+                    Con VibeFuel vivi ogni giorno con più vitalità, consapevolezza e gusto.
+                    Ingredienti veri, zero stress, solo nutrienti naturali.
+                    Abbraccia un benessere autentico e senza compromessi.
+                </p>
+
+                <div class="benefits-grid">
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🌱</div>
+                        <div class="benefit-text">100% Naturale</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">💪</div>
+                        <div class="benefit-text">Alto Contenuto Proteico</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">🚫</div>
+                        <div class="benefit-text">Zero Zuccheri Aggiunti</div>
+                    </div>
+                    <div class="benefit-item">
+                        <div class="benefit-icon">⚡</div>
+                        <div class="benefit-text">Energia Duratura</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Inizia oggi il tuo percorso</h2>
+            <p class="cta-subtitle">Scopri la linea VibeFuel e porta l'energia autentica nella tua vita</p>
+
+            <button class="cta-button"
+                onclick="alert('Grazie per il tuo interesse! La funzione di acquisto sarà presto disponibile.')">
+                Prova VibeFuel Ora
+            </button>
+
+            <div class="promo-badge">🎉 Sconto 10% sul primo ordine + Spedizione rapida</div>
+
+            <ul class="features-list">
+                <li>Ingredienti naturali selezionati</li>
+                <li>Spedizione veloce in 24-48h</li>
+                <li>Soddisfatti o rimborsati</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- COUNTDOWN JAVASCRIPT -->
+    <script>
+        // Set the date we're counting down to (January 8, 2026)
+        const countDownDate = new Date("January 8, 2026 23:59:59").getTime();
+
+        // Update the countdown every 1 second
+        const countdownFunction = setInterval(function () {
+            // Get today's date and time
+            const now = new Date().getTime();
+
+            // Find the distance between now and the count down date
+            const distance = countDownDate - now;
+
+            // Time calculations for days, hours, minutes and seconds
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Display the result in the elements with id="days", "hours", "minutes", "seconds"
+            document.getElementById("days").innerHTML = String(days).padStart(2, '0');
+            document.getElementById("hours").innerHTML = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerHTML = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerHTML = String(seconds).padStart(2, '0');
+
+            // If the count down is finished, write some text
+            if (distance < 0) {
+                clearInterval(countdownFunction);
+                document.querySelector(".countdown-section").innerHTML =
+                    '<div class="countdown-text">L\'offerta è terminata!</div>';
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>
